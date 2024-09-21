@@ -4,8 +4,8 @@ import ProductCard from './ProductCard';
 
 const Shop = ({ cartItems, setCartItems }) => {
   const [products, setProducts] = useState([]);
-  const imageContainerRef = useRef(null); // Initialize the ref for the image container
-  const carouselIntervalRef = useRef(null); // To store the interval reference
+  const imageContainerRef = useRef(null);
+  const carouselIntervalRef = useRef(null);
 
   useEffect(() => {
     fetch('https://fakestoreapi.com/products')
@@ -30,7 +30,7 @@ const Shop = ({ cartItems, setCartItems }) => {
 
   useEffect(() => {
     const scrollCarousel = () => {
-      if (!imageContainerRef.current) return; // Ensure the ref is not null
+      if (!imageContainerRef.current) return;
 
       const maxScrollLeft = imageContainerRef.current.scrollWidth - imageContainerRef.current.clientWidth;
 
@@ -43,22 +43,21 @@ const Shop = ({ cartItems, setCartItems }) => {
 
     const scrollAmount = window.innerWidth < 600 ? 150 : 300;
 
-    // Only set interval if imageContainerRef is not null
     if (imageContainerRef.current) {
-      carouselIntervalRef.current = setInterval(scrollCarousel, 1500); // Store interval reference
+      carouselIntervalRef.current = setInterval(scrollCarousel, 1500);
     }
 
-    return () => clearInterval(carouselIntervalRef.current); // Clear interval on component unmount
-  }, [products]); // Ensure products are loaded before setting the scroll interval
+    return () => clearInterval(carouselIntervalRef.current);
+  }, [products]);
 
   const handleMouseEnter = () => {
-    clearInterval(carouselIntervalRef.current); // Pause the scroll when hovering
+    clearInterval(carouselIntervalRef.current);
   };
 
   const handleMouseLeave = () => {
     const scrollAmount = window.innerWidth < 600 ? 150 : 300;
     const scrollCarousel = () => {
-      if (!imageContainerRef.current) return; // Ensure the ref is not null
+      if (!imageContainerRef.current) return;
 
       const maxScrollLeft = imageContainerRef.current.scrollWidth - imageContainerRef.current.clientWidth;
 
@@ -68,7 +67,7 @@ const Shop = ({ cartItems, setCartItems }) => {
         imageContainerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
       }
     };
-    // Resume the scroll when not hovering
+    
     if (imageContainerRef.current) {
       carouselIntervalRef.current = setInterval(scrollCarousel, 1500);
     }
@@ -78,8 +77,8 @@ const Shop = ({ cartItems, setCartItems }) => {
     <div
       className="shop"
       ref={imageContainerRef}
-      onMouseEnter={handleMouseEnter} // Pause scroll on hover
-      onMouseLeave={handleMouseLeave} // Resume scroll when mouse leaves
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       {products.map((product) => (
         <ProductCard key={product.id} product={product} addToCart={addToCart} />

@@ -6,9 +6,8 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const imageContainerRef = useRef(null);
-  const autoScrollRef = useRef(null); // To store the interval reference
-
-  // Fetch shop items from FakeStore API
+  const autoScrollRef = useRef(null);
+  
   useEffect(() => {
     const fetchShopItems = async () => {
       try {
@@ -26,7 +25,6 @@ const Home = () => {
     fetchShopItems();
   }, []);
 
-  // GSAP Animation for image cards
   useEffect(() => {
     if (imageContainerRef.current) {
       gsap.fromTo(
@@ -43,12 +41,11 @@ const Home = () => {
     }
   }, [shopItems]);
 
-  // Auto-scroll logic with responsiveness
   useEffect(() => {
     const scrollCarousel = () => {
       if (!imageContainerRef.current) return;
 
-      const scrollAmount = window.innerWidth < 600 ? 150 : 300; // Define scrollAmount inside function
+      const scrollAmount = window.innerWidth < 600 ? 150 : 300;
       const maxScrollLeft = imageContainerRef.current.scrollWidth - imageContainerRef.current.clientWidth;
 
       if (imageContainerRef.current.scrollLeft >= maxScrollLeft) {
@@ -58,18 +55,16 @@ const Home = () => {
       }
     };
 
-    // Start auto-scroll
     autoScrollRef.current = setInterval(scrollCarousel, 1500);
 
-    return () => clearInterval(autoScrollRef.current); // Clear interval on component unmount
+    return () => clearInterval(autoScrollRef.current);
   }, []);
 
-  // Pause auto-scroll on hover
   const handleMouseEnter = () => {
-    clearInterval(autoScrollRef.current); // Stop the auto-scroll
+    clearInterval(autoScrollRef.current);
   };
 
-  // Resume auto-scroll when mouse leaves
+
   const handleMouseLeave = () => {
     const scrollCarousel = () => {
       const scrollAmount = window.innerWidth < 600 ? 150 : 300;
@@ -80,7 +75,7 @@ const Home = () => {
         imageContainerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
       }
     };
-    // Restart auto-scroll
+
     autoScrollRef.current = setInterval(scrollCarousel, 1500);
   };
 
@@ -98,8 +93,8 @@ const Home = () => {
           <div
             className="image-carousel"
             ref={imageContainerRef}
-            onMouseEnter={handleMouseEnter} // Pause scroll on hover
-            onMouseLeave={handleMouseLeave} // Resume scroll when mouse leaves
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
           >
             {shopItems.map((item) => (
               <div key={item.id} className="image-card">

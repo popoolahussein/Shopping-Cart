@@ -1,0 +1,378 @@
+* {
+  padding: 0.001px;
+  margin: 0.001px;
+  box-sizing: border-box;
+}
+
+.Navbar {
+  background-color: #333;
+  padding: 1rem;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.Navbar-ul {
+  list-style: none;
+  display: flex;
+  gap: 5px;
+}
+
+.Navbar-ul-li {
+  margin: 0 1rem;
+}
+
+.Navbar-ul-li-a:hover {
+  color: #672763;
+  border: #ddd solid 1px;
+  background-color: #ddd;
+  padding: 5px;
+}
+
+.Navbar-ul-li-a {
+  color: white;
+  text-decoration: none;
+}
+
+.product-card {
+  border: 1px solid #ddd;
+  padding: 1rem;
+  margin: 1rem;
+  text-align: center;
+}
+
+.product-card-img {
+  max-width: 100px;
+}
+
+.quantity-control {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+}
+
+.quantity-control-input {
+  width: 40px;
+  text-align: center;
+}
+
+.quantity-control-button {
+  margin: 0.5rem;
+  padding: 0.5rem;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.decrement-button {
+  padding: 3px;
+  color: white;
+  background-color: red;
+}
+
+.increment-button {
+  padding: 3px;
+  color: white;
+  background-color: green;
+}
+
+.cart {
+  background-image: url('/public/img/cart.jpg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100%;
+  color: #ddd;
+  min-height: 100vh;
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+  justify-self: center;
+}
+
+.checkout-button {
+  background-color: green;
+  border-radius: 4px;
+  padding: 6px;
+  color: #ddd;
+  font-size: larger;
+}
+
+.clearCart {
+  background-color: red;
+  border-radius: 4px;
+  margin-right: 4px;
+  padding: 6px;
+  color: #ddd;
+  font-size: larger;
+}
+
+.button-box {
+  display: flex;
+  justify-content: center;
+}
+
+.cart-ul {
+  list-style: none;
+}
+
+.cart-li {
+  margin: 0.5rem 0;
+}
+
+.cart-container {
+  padding: 20px;
+}
+
+.cart-items {
+  display: grid;
+  flex-flow: row wrap;
+  justify-content: center;
+}
+
+.cart-item {
+  border: solid 2px black;
+  width: 200px;
+  margin: 10px;
+  text-align: center;
+  height: fit-content;
+  padding: 10px;
+}
+
+.cart-item img {
+  width: 100%;
+  height: auto;
+}
+
+.cart-remove-button-box {
+  display: flex;
+}
+
+.cart-remove-button {
+  display: inline-block;
+  width: 100%;
+  padding: 0.625rem 1.25rem;
+  font-size: var(--font-size-large);
+  font-weight: bold;
+  color: white;
+  background-color: #e31515;
+  border: none;
+  border-radius: 5px;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.home-container {
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to bottom right, #fcb69f, #ffecd2);
+}
+
+.background-animation {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.2) 100%);
+  z-index: -1;
+  animation: backgroundAnimation 10s infinite alternate;
+}
+
+@keyframes backgroundAnimation {
+  0% {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  100% {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+}
+
+.home-content {
+  text-align: center;
+  color: #333;
+}
+
+.home-title {
+  font-size: 3.5rem;
+  margin-bottom: 20px;
+  color: #333;
+  animation: titleAnimation 2s ease-out;
+}
+
+@keyframes titleAnimation {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.home-description {
+  font-size: 1.5rem;
+  margin-bottom: 40px;
+  color: #555;
+}
+
+.image-carousel {
+  display: flex;
+  overflow-x: auto;
+  gap: 20px;
+  margin: 0 auto;
+  scroll-behavior: smooth;
+  width: 100%;
+  max-width: 70%;
+  scroll-snap-type: x mandatory;
+}
+
+.image-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 15px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  max-width: 300px;
+  flex: 0 0 auto;
+  height: 400px;
+  scroll-snap-align: start;
+}
+
+@media only screen and (max-width: 600px) {
+  .image-card {
+    width: 100%;
+  }
+}
+
+.image-card:hover {
+  transform: scale(1.1);
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.image-card:hover .product-image {
+  transform: scale(1.1);
+}
+
+.image-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  padding: 20px;
+  box-sizing: border-box;
+  transform: translateY(100%);
+  transition: transform 0.5s ease;
+}
+
+.image-card:hover .image-overlay {
+  transform: translateY(0);
+}
+
+.image-overlay h3 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.image-overlay p {
+  font-size: 1rem;
+  margin-top: 10px;
+}
+
+.cart-total {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000000a7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.modal-buttons {
+  margin-top: 20px;
+}
+
+.modal-buttons button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.modal-buttons button:first-child {
+  background-color: #f44336;
+  color: #fff;
+}
+
+.modal-buttons button:last-child {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.close-modal {
+  position: absolute;
+  top: 0;
+  right: 0.625rem;
+  background: #ff0000eb;
+  color: white;
+  border: none;
+  border-radius: 9px;
+  cursor: pointer;
+  padding: 5px;
+  margin-top: 5px;
+}
+
+button:hover, a:hover {
+  opacity: 0.6;
+}
+
+.social-share {
+  margin-top: 20px;
+}
+
+.social-share a {
+  display: inline-block;
+  margin-right: 15px;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+}

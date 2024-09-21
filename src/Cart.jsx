@@ -30,14 +30,14 @@ const Cart = ({ setCartItems }) => {
 
   const handleDecrement = (id) => {
     const updatedCartItems = cartItems.map((item) =>
-      item.id === id && item.quantity > 1
-        ? { ...item, quantity: item.quantity - 1 }
+      item.id === id
+        ? { ...item, quantity: Math.max(item.quantity - 1, 0) }
         : item
-    );
+    ).filter(item => item.quantity > 0);
     setLocalCartItems(updatedCartItems);
     updateLocalStorage(updatedCartItems);
   };
-
+  
   const handleRemove = (id) => {
     const updatedCartItems = cartItems.filter((item) => item.id !== id);
     setLocalCartItems(updatedCartItems);

@@ -1,12 +1,35 @@
-import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-const ProductCard = ({ product, addToCart }) => {
-  const [quantity, setQuantity] = useState(1);
+const ProductCard = ({ product, cartItems, setCartItems }) => {
+  const existingItem = cartItems.find((item) => item.id === product.id);
+  const quantity = existingItem ? existingItem.quantity : 0;
 
-  const handleAddToCart = () => {
-    addToCart(product, quantity);
-    setQuantity(1);
+  const updateCart = (newQuantity) => {
+    let updatedCartItems;
+
+    if (newQuantity > 0) {
+      updatedCartItems = existingItem
+        ? cartItems.map((item) =>
+            item.id === product.id ? { ...item, quantity: newQuantity } : item
+          )
+        : [...cartItems, { ...product, quantity: newQuantity }];
+    } else {
+      updatedCartItems = cartItems.filter((item) => item.id !== product.id);
+    }
+
+    setCartItems(updatedCartItems);
+    localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+  };
+
+  const incrementQuantity = () => {
+    updateCart(quantity + 1);
+  };
+
+  const decrementQuantity = () => {
+    if (quantity > 0) {
+      updateCart(quantity - 1);
+    }
   };
 
   return (
@@ -16,11 +39,24 @@ const ProductCard = ({ product, addToCart }) => {
       <p>{product.description}</p>
       <p>${product.price}</p>
       <div className="quantity-control">
-        <button className='decrement-button' onClick={() => setQuantity(quantity > 1 ? quantity - 1 : 1)}>-</button>
+        <button
+          className='decrement-button'
+          onClick={decrementQuantity}
+          disabled={quantity === 0}
+        >
+          -
+        </button>
         <span>{quantity}</span>
-        <button className='increment-button' onClick={() => setQuantity(quantity + 1)}>+</button>
+        <button
+          className='increment-button'
+          onClick={incrementQuantity}
+        >
+          +
+        </button>
       </div>
-      <button className='quantity-control-button' onClick={handleAddToCart}>Add to Cart</button>
+      <button className='go-to-cart'>
+        <Link className="Navbar-ul-li-a" to="/cart">Go to Cart</Link>
+      </button>
     </div>
   );
 };
@@ -33,7 +69,11 @@ ProductCard.propTypes = {
     description: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
   }).isRequired,
-  addToCart: PropTypes.func.isRequired,
+  cartItems: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    quantity: PropTypes.number.isRequired,
+  })).isRequired,
+  setCartItems: PropTypes.func.isRequired,
 };
 
 export default ProductCard;

@@ -1,12 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import ProductCard from './ProductCard';
-import Modal from './Modal';
 
 const Shop = ({ cartItems, setCartItems }) => {
   const [products, setProducts] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
   const imageContainerRef = useRef(null);
   const carouselIntervalRef = useRef(null);
 
@@ -15,30 +12,6 @@ const Shop = ({ cartItems, setCartItems }) => {
       .then((res) => res.json())
       .then((data) => setProducts(data));
   }, []);
-
-  const addToCart = (product, quantity) => {
-    const existingItem = cartItems.find((item) => item.id === product.id);
-
-    if (!existingItem) {
-      const updatedCartItems = [...cartItems, { ...product, quantity }];
-      setCartItems(updatedCartItems);
-    } else {
-      setSelectedProduct({ ...product, quantity });
-      setIsModalOpen(true);
-    }
-  };
-
-  const handleReplaceItem = () => {
-    const updatedCartItems = cartItems.map((item) =>
-      item.id === selectedProduct.id ? { ...item, quantity: selectedProduct.quantity } : item
-    );
-    setCartItems(updatedCartItems);
-    setIsModalOpen(false);
-  };
-
-  const handleKeepItem = () => {
-    setIsModalOpen(false);
-  };
 
   useEffect(() => {
     const scrollCarousel = () => {
@@ -93,16 +66,13 @@ const Shop = ({ cartItems, setCartItems }) => {
       onMouseLeave={handleMouseLeave}
     >
       {products.map((product) => (
-        <ProductCard key={product.id} product={product} addToCart={addToCart} />
+        <ProductCard 
+          key={product.id} 
+          product={product} 
+          cartItems={cartItems} 
+          setCartItems={setCartItems}
+        />
       ))}
-
-      <Modal isOpen={isModalOpen} onClose={handleKeepItem}>
-        <p>This item is already in your cart. Do you want to replace it?</p>
-        <div className='modal-buttons'>
-        <button onClick={handleReplaceItem}>Replace</button>
-        <button onClick={handleKeepItem}>Retain</button>
-        </div>
-      </Modal>
     </div>
   );
 };

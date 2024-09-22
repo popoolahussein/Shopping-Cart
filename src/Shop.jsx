@@ -98,9 +98,9 @@ const Shop = ({ cartItems, setCartItems }) => {
 
       <Modal isOpen={isModalOpen} onClose={handleKeepItem}>
         <p>This item is already in your cart. Do you want to replace it?</p>
-        <div className='quantity-control'>
-        <button className='decrement-button' onClick={handleReplaceItem}>Replace</button>
-        <button className='increment-button' onClick={handleKeepItem}>Retain</button>
+        <div className='modal-buttons'>
+        <button onClick={handleReplaceItem}>Replace</button>
+        <button onClick={handleKeepItem}>Retain</button>
         </div>
       </Modal>
     </div>

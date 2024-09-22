@@ -4,6 +4,11 @@
   box-sizing: border-box;
 }
 
+button {
+  border: none;
+  border-radius: 2px;
+}
+
 .Navbar {
   background-color: #333;
   padding: 1rem;

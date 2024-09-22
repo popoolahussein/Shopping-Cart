@@ -63,7 +63,7 @@ button {
   text-align: center;
 }
 
-.quantity-control-button {
+.go-to-cart {
   margin: 0.5rem;
   padding: 0.5rem;
   background-color: #28a745;
@@ -85,7 +85,6 @@ button {
 }
 
 .cart {
-  background-image: url('/public/img/cart.jpg');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;

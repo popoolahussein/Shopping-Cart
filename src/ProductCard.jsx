@@ -26,9 +26,12 @@ const ProductCard = ({ product, cartItems, setCartItems }) => {
   };
 
   const incrementQuantity = () => {
-    const newQuantity = quantity + 1;
-    setQuantity(newQuantity);
-    updateCart(newQuantity);
+    // Disable the increment button after adding to the cart
+    if (quantity === 0) {
+      const newQuantity = quantity + 1;
+      setQuantity(newQuantity);
+      updateCart(newQuantity);
+    }
   };
 
   const decrementQuantity = () => {
@@ -53,18 +56,24 @@ const ProductCard = ({ product, cartItems, setCartItems }) => {
 
   return (
     <div className="product-card">
-      <img className='product-card-img' src={product.image} alt={product.title} />
+      <img className="product-card-img" src={product.image} alt={product.title} />
       <h3>{product.title}</h3>
       <p>{product.description}</p>
       <p>${product.price}</p>
 
       {quantity === 0 ? (
-        <button className="add-to-cart" onClick={addToCart}>Add to Cart</button>
+        <button className="add-to-cart" onClick={addToCart}>
+          Add to Cart
+        </button>
       ) : (
         <div className="quantity-control">
-          <button className="decrement-button" onClick={decrementQuantity}>-</button>
+          <button className="decrement-button" onClick={decrementQuantity}>
+            -
+          </button>
           <span>{quantity}</span>
-          <button className="increment-button" onClick={incrementQuantity}>+</button>
+          <button className="increment-button" onClick={incrementQuantity} disabled={quantity > 0}>
+            +
+          </button>
         </div>
       )}
     </div>
@@ -79,10 +88,12 @@ ProductCard.propTypes = {
     description: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
   }).isRequired,
-  cartItems: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    quantity: PropTypes.number.isRequired,
-  })).isRequired,
+  cartItems: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      quantity: PropTypes.number.isRequired,
+    })
+  ).isRequired,
   setCartItems: PropTypes.func.isRequired,
 };
 

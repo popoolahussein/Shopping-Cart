@@ -1,13 +1,16 @@
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { useState, useEffect } from 'react';
 
 const ProductCard = ({ product, cartItems, setCartItems }) => {
   const existingItem = cartItems.find((item) => item.id === product.id);
-  const quantity = existingItem ? existingItem.quantity : 0;
+  const [quantity, setQuantity] = useState(existingItem ? existingItem.quantity : 0);
+
+  const updateLocalStorage = (updatedCartItems) => {
+    localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+  };
 
   const updateCart = (newQuantity) => {
     let updatedCartItems;
-
     if (newQuantity > 0) {
       updatedCartItems = existingItem
         ? cartItems.map((item) =>
@@ -19,18 +22,34 @@ const ProductCard = ({ product, cartItems, setCartItems }) => {
     }
 
     setCartItems(updatedCartItems);
-    localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+    updateLocalStorage(updatedCartItems); // Update localStorage
   };
 
   const incrementQuantity = () => {
-    updateCart(quantity + 1);
+    const newQuantity = quantity + 1;
+    setQuantity(newQuantity);
+    updateCart(newQuantity);
   };
 
   const decrementQuantity = () => {
     if (quantity > 0) {
-      updateCart(quantity - 1);
+      const newQuantity = quantity - 1;
+      setQuantity(newQuantity);
+      updateCart(newQuantity);
     }
   };
+
+  const addToCart = () => {
+    setQuantity(1);
+    updateCart(1);
+  };
+
+  useEffect(() => {
+    const savedCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    if (savedCartItems.length > 0) {
+      setCartItems(savedCartItems);
+    }
+  }, [setCartItems]);
 
   return (
     <div className="product-card">
@@ -38,25 +57,16 @@ const ProductCard = ({ product, cartItems, setCartItems }) => {
       <h3>{product.title}</h3>
       <p>{product.description}</p>
       <p>${product.price}</p>
-      <div className="quantity-control">
-        <button
-          className='decrement-button'
-          onClick={decrementQuantity}
-          disabled={quantity === 0}
-        >
-          -
-        </button>
-        <span>{quantity}</span>
-        <button
-          className='increment-button'
-          onClick={incrementQuantity}
-        >
-          +
-        </button>
-      </div>
-      <button className='go-to-cart'>
-        <Link className="Navbar-ul-li-a" to="/cart">Go to Cart</Link>
-      </button>
+
+      {quantity === 0 ? (
+        <button className="add-to-cart" onClick={addToCart}>Add to Cart</button>
+      ) : (
+        <div className="quantity-control">
+          <button className="decrement-button" onClick={decrementQuantity}>-</button>
+          <span>{quantity}</span>
+          <button className="increment-button" onClick={incrementQuantity}>+</button>
+        </div>
+      )}
     </div>
   );
 };

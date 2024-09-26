@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
+import QuantityControl from './QuantityControl'; // Import the new component
 
 const ProductCard = ({ product, cartItems, setCartItems }) => {
   const existingItem = cartItems.find((item) => item.id === product.id);
-  const [quantity, setQuantity] = useState(existingItem ? existingItem.quantity : 0);
+  const [shopQuantity, setShopQuantity] = useState(0); // Separate shop quantity
 
   const updateLocalStorage = (updatedCartItems) => {
     localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
@@ -11,6 +12,7 @@ const ProductCard = ({ product, cartItems, setCartItems }) => {
 
   const updateCart = (newQuantity) => {
     let updatedCartItems;
+
     if (newQuantity > 0) {
       updatedCartItems = existingItem
         ? cartItems.map((item) =>
@@ -25,34 +27,32 @@ const ProductCard = ({ product, cartItems, setCartItems }) => {
     updateLocalStorage(updatedCartItems); // Update localStorage
   };
 
-  const incrementQuantity = () => {
-    // Disable the increment button after adding to the cart
-    if (quantity === 0) {
-      const newQuantity = quantity + 1;
-      setQuantity(newQuantity);
-      updateCart(newQuantity);
-    }
+  const incrementShopQuantity = () => {
+    setShopQuantity(shopQuantity + 1); // Increment shop quantity
   };
 
-  const decrementQuantity = () => {
-    if (quantity > 0) {
-      const newQuantity = quantity - 1;
-      setQuantity(newQuantity);
-      updateCart(newQuantity);
+  const decrementShopQuantity = () => {
+    if (shopQuantity > 0) {
+      const newQuantity = shopQuantity - 1;
+      setShopQuantity(newQuantity);
+      // Remove from cart if quantity is 0
+      if (newQuantity === 0) {
+        updateCart(0);
+      }
     }
   };
 
   const addToCart = () => {
-    setQuantity(1);
+    setShopQuantity(1); // Reset shop quantity to 1 when added to cart
     updateCart(1);
   };
 
   useEffect(() => {
-    const savedCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-    if (savedCartItems.length > 0) {
-      setCartItems(savedCartItems);
+    // Sync with existing cart item quantity
+    if (existingItem) {
+      setShopQuantity(existingItem.quantity);
     }
-  }, [setCartItems]);
+  }, [existingItem]);
 
   return (
     <div className="product-card">
@@ -61,20 +61,16 @@ const ProductCard = ({ product, cartItems, setCartItems }) => {
       <p>{product.description}</p>
       <p>${product.price}</p>
 
-      {quantity === 0 ? (
+      {existingItem ? (
+        <QuantityControl
+          quantity={shopQuantity}
+          onIncrement={incrementShopQuantity}
+          onDecrement={decrementShopQuantity}
+        />
+      ) : (
         <button className="add-to-cart" onClick={addToCart}>
           Add to Cart
         </button>
-      ) : (
-        <div className="quantity-control">
-          <button className="decrement-button" onClick={decrementQuantity}>
-            -
-          </button>
-          <span>{quantity}</span>
-          <button className="increment-button" onClick={incrementQuantity} disabled={quantity > 0}>
-            +
-          </button>
-        </div>
       )}
     </div>
   );

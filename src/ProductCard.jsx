@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
-import QuantityControl from './QuantityControl'; // Import the new component
+import QuantityControl from './QuantityControl';
 
 const ProductCard = ({ product, cartItems, setCartItems }) => {
   const existingItem = cartItems.find((item) => item.id === product.id);
-  const [shopQuantity, setShopQuantity] = useState(0); // Separate shop quantity
+  const [shopQuantity, setShopQuantity] = useState(0);
 
   const updateLocalStorage = (updatedCartItems) => {
     localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
@@ -24,18 +24,17 @@ const ProductCard = ({ product, cartItems, setCartItems }) => {
     }
 
     setCartItems(updatedCartItems);
-    updateLocalStorage(updatedCartItems); // Update localStorage
+    updateLocalStorage(updatedCartItems);
   };
 
   const incrementShopQuantity = () => {
-    setShopQuantity(shopQuantity + 1); // Increment shop quantity
+    setShopQuantity(shopQuantity + 1);
   };
 
   const decrementShopQuantity = () => {
     if (shopQuantity > 0) {
       const newQuantity = shopQuantity - 1;
       setShopQuantity(newQuantity);
-      // Remove from cart if quantity is 0
       if (newQuantity === 0) {
         updateCart(0);
       }
@@ -43,12 +42,11 @@ const ProductCard = ({ product, cartItems, setCartItems }) => {
   };
 
   const addToCart = () => {
-    setShopQuantity(1); // Reset shop quantity to 1 when added to cart
+    setShopQuantity(1);
     updateCart(1);
   };
 
   useEffect(() => {
-    // Sync with existing cart item quantity
     if (existingItem) {
       setShopQuantity(existingItem.quantity);
     }

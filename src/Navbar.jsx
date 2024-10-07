@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useContext } from 'react';
-import { CartContext } from './CartContext';
+import { CartContext } from './CartContext.jsx';
 
 const Navbar = () => {
   const { cartItems } = useContext(CartContext);

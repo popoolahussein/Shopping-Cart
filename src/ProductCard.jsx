@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
-import QuantityControl from './QuantityControl';
-import { CartContext } from './CartContext';
+import QuantityControl from './QuantityControl.jsx';
+import { CartContext } from './CartContext.jsx';
 
 const ProductCard = ({ product }) => {
   const { cartItems, setCartItems } = useContext(CartContext);

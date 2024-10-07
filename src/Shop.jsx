@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useContext } from 'react';
-import ProductCard from './ProductCard';
-import { CartContext } from './CartContext';
+import ProductCard from './ProductCard.jsx';
+import { CartContext } from './CartContext.jsx';
 
 const Shop = () => {
   const [products, setProducts] = useState([]);

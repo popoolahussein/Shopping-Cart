@@ -1,47 +1,33 @@
-import { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import { useState, useContext } from 'react';
 import Modal from './Modal';
+import { CartContext } from './CartContext';
 
-const Cart = ({ setCartItems }) => {
-  const [cartItems, setLocalCartItems] = useState([]);
+const Cart = () => {
+  const { cartItems, setCartItems } = useContext(CartContext);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [isSocialModalOpen, setIsSocialModalOpen] = useState(false);
-
-  useEffect(() => {
-    const storedCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-    setLocalCartItems(storedCartItems);
-  }, []);
-
-  useEffect(() => {
-    setCartItems(cartItems); 
-  }, [cartItems, setCartItems]);
-
-  const updateLocalStorage = (items) => {
-    localStorage.setItem('cartItems', JSON.stringify(items));
-  };
 
   const handleIncrement = (id) => {
     const updatedCartItems = cartItems.map((item) =>
       item.id === id ? { ...item, quantity: item.quantity + 1 } : item
     );
-    setLocalCartItems(updatedCartItems);
-    updateLocalStorage(updatedCartItems);
+    setCartItems(updatedCartItems);
   };
 
   const handleDecrement = (id) => {
-    const updatedCartItems = cartItems.map((item) =>
-      item.id === id
-        ? { ...item, quantity: Math.max(item.quantity - 1, 0) }
-        : item
-    ).filter(item => item.quantity > 0);
-    setLocalCartItems(updatedCartItems);
-    updateLocalStorage(updatedCartItems);
+    const updatedCartItems = cartItems
+      .map((item) =>
+        item.id === id
+          ? { ...item, quantity: Math.max(item.quantity - 1, 0) }
+          : item
+      )
+      .filter(item => item.quantity > 0);
+    setCartItems(updatedCartItems);
   };
-  
+
   const handleRemove = (id) => {
     const updatedCartItems = cartItems.filter((item) => item.id !== id);
-    setLocalCartItems(updatedCartItems);
-    updateLocalStorage(updatedCartItems);
+    setCartItems(updatedCartItems);
   };
 
   const handleClearCart = () => {
@@ -49,8 +35,7 @@ const Cart = ({ setCartItems }) => {
   };
 
   const handleConfirmClear = () => {
-    setLocalCartItems([]);
-    localStorage.removeItem('cartItems');
+    setCartItems([]);
     setIsConfirmationModalOpen(false);
   };
 
@@ -60,7 +45,6 @@ const Cart = ({ setCartItems }) => {
 
   const handleCheckoutClick = () => {
     setIsSocialModalOpen(true);
-    handleClearCart()
   };
 
   const handleCloseSocialModal = () => {
@@ -165,10 +149,6 @@ const Cart = ({ setCartItems }) => {
       )}
     </div>
   );
-};
-
-Cart.propTypes = {
-  setCartItems: PropTypes.func.isRequired,
 };
 
 export default Cart;

@@ -1,25 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useContext } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './Home';
 import Shop from './Shop';
 import Cart from './Cart';
 import Navbar from './Navbar';
+import { CartContext } from './CartContext';
 
 const App = () => {
-  const [cartItems, setCartItems] = useState([]);
-
-  useEffect(() => {
-    const storedCartItems = localStorage.getItem('cartItems');
-    if (storedCartItems) {
-      setCartItems(JSON.parse(storedCartItems));
-    }
-  }, []);
-
-  useEffect(() => {
-    if (cartItems.length > 0) {
-      localStorage.setItem('cartItems', JSON.stringify(cartItems));
-    }
-  }, [cartItems]);
+  const { cartItems, setCartItems } = useContext(CartContext);
 
   return (
     <Router>

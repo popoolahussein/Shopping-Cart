@@ -1,14 +1,11 @@
-import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import QuantityControl from './QuantityControl';
+import { CartContext } from './CartContext';
 
-const ProductCard = ({ product, cartItems, setCartItems }) => {
+const ProductCard = ({ product }) => {
+  const { cartItems, setCartItems } = useContext(CartContext);
   const existingItem = cartItems.find((item) => item.id === product.id);
   const [shopQuantity, setShopQuantity] = useState(0);
-
-  const updateLocalStorage = (updatedCartItems) => {
-    localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
-  };
 
   const updateCart = (newQuantity) => {
     let updatedCartItems;
@@ -24,7 +21,6 @@ const ProductCard = ({ product, cartItems, setCartItems }) => {
     }
 
     setCartItems(updatedCartItems);
-    updateLocalStorage(updatedCartItems);
   };
 
   const incrementShopQuantity = () => {
@@ -72,23 +68,6 @@ const ProductCard = ({ product, cartItems, setCartItems }) => {
       )}
     </div>
   );
-};
-
-ProductCard.propTypes = {
-  product: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    image: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
-  }).isRequired,
-  cartItems: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      quantity: PropTypes.number.isRequired,
-    })
-  ).isRequired,
-  setCartItems: PropTypes.func.isRequired,
 };
 
 export default ProductCard;

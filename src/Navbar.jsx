@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import { useContext } from 'react';
+import { CartContext } from './CartContext';
 
-const Navbar = ({ cartItems }) => {
+const Navbar = () => {
+  const { cartItems } = useContext(CartContext);
   const totalItems = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
@@ -14,18 +16,6 @@ const Navbar = ({ cartItems }) => {
       </ul>
     </nav>
   );
-};
-
-Navbar.propTypes = {
-  cartItems: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      title: PropTypes.string.isRequired,
-      price: PropTypes.number.isRequired,
-      quantity: PropTypes.number.isRequired,
-      image: PropTypes.string.isRequired,
-    })
-  ).isRequired,
 };
 
 export default Navbar;

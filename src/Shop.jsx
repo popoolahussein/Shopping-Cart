@@ -1,11 +1,12 @@
-import { useState, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
+import { useState, useEffect, useRef, useContext } from 'react';
 import ProductCard from './ProductCard';
+import { CartContext } from './CartContext';
 
-const Shop = ({ cartItems, setCartItems }) => {
+const Shop = () => {
   const [products, setProducts] = useState([]);
   const imageContainerRef = useRef(null);
   const carouselIntervalRef = useRef(null);
+  const { cartItems, setCartItems } = useContext(CartContext);
 
   useEffect(() => {
     fetch('https://fakestoreapi.com/products')
@@ -70,19 +71,11 @@ const Shop = ({ cartItems, setCartItems }) => {
           key={product.id} 
           product={product} 
           cartItems={cartItems} 
-          setCartItems={setCartItems}
+          setCartItems={setCartItems} 
         />
       ))}
     </div>
   );
-};
-
-Shop.propTypes = {
-  cartItems: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    quantity: PropTypes.number.isRequired,
-  })).isRequired,
-  setCartItems: PropTypes.func.isRequired,
 };
 
 export default Shop;

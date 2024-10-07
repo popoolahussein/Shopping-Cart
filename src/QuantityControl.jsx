@@ -1,5 +1,3 @@
-import PropTypes from 'prop-types';
-
 const QuantityControl = ({ quantity, onIncrement, onDecrement }) => {
   return (
     <div className="quantity-control">
@@ -12,12 +10,6 @@ const QuantityControl = ({ quantity, onIncrement, onDecrement }) => {
       </button>
     </div>
   );
-};
-
-QuantityControl.propTypes = {
-  quantity: PropTypes.number.isRequired,
-  onIncrement: PropTypes.func.isRequired,
-  onDecrement: PropTypes.func.isRequired,
 };
 
 export default QuantityControl;

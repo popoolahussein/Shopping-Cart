@@ -1,11 +1,10 @@
-import { useState, useEffect, useRef, useContext } from 'react'; 
+import { useState, useEffect, useRef, useContext } from 'react';
 import ProductCard from './ProductCard.jsx';
 import { CartContext } from './CartContext.jsx';
 
 const Shop = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null); // State for error handling
   const imageContainerRef = useRef(null);
   const carouselIntervalRef = useRef(null);
   const { cartItems, setCartItems } = useContext(CartContext);
@@ -15,13 +14,12 @@ const Shop = () => {
       try {
         const response = await fetch('https://fakestoreapi.com/products');
         if (!response.ok) {
-          throw new Error(`Error: ${response.status} - ${response.statusText}`);
+          throw new Error('Network response was not ok');
         }
         const data = await response.json();
         setProducts(data);
       } catch (error) {
         console.error('Error fetching products:', error);
-        setError(error.message); // Set the error message
       } finally {
         setLoading(false);
       }

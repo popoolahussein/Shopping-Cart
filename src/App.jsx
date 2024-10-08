@@ -4,6 +4,7 @@ import Home from './Home.jsx';
 import Shop from './Shop.jsx';
 import Cart from './Cart.jsx';
 import Navbar from './Navbar.jsx';
+import NotFound from './NotFound.jsx';
 import { CartContext } from './CartContext.jsx';
 
 const App = () => {
@@ -15,8 +16,9 @@ const App = () => {
         <Navbar cartItems={cartItems} />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/Shop" element={<Shop cartItems={cartItems} setCartItems={setCartItems} />} />
-          <Route path="/Cart" element={<Cart cartItems={cartItems} setCartItems={setCartItems} />} />
+          <Route path="/shop" element={<Shop cartItems={cartItems} setCartItems={setCartItems} />} />
+          <Route path="/cart" element={<Cart cartItems={cartItems} setCartItems={setCartItems} />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
     </Router>

@@ -15,8 +15,8 @@ const App = () => {
         <Navbar cartItems={cartItems} />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/Shop" element={<Shop cartItems={cartItems} setCartItems={setCartItems} />} />
-          <Route path="/Cart" element={<Cart cartItems={cartItems} setCartItems={setCartItems} />} />
+          <Route path="/shop" element={<Shop cartItems={cartItems} setCartItems={setCartItems} />} />
+          <Route path="/cart" element={<Cart cartItems={cartItems} setCartItems={setCartItems} />} />
         </Routes>
       </div>
     </Router>

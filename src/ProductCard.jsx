@@ -1,50 +1,43 @@
-import { useState, useEffect, useContext } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import QuantityControl from './QuantityControl.jsx';
-import { CartContext } from './CartContext.jsx';
+import { addToCart, removeFromCart } from './cartSlice';
 
 const ProductCard = ({ product }) => {
-  const { cartItems, setCartItems } = useContext(CartContext);
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.cartItems);
   const existingItem = cartItems.find((item) => item.id === product.id);
-  const [shopQuantity, setShopQuantity] = useState(0);
+  const [shopQuantity, setShopQuantity] = useState(existingItem ? existingItem.quantity : 0);
 
   const updateCart = (newQuantity) => {
-    let updatedCartItems;
-
     if (newQuantity > 0) {
-      updatedCartItems = existingItem
-        ? cartItems.map((item) =>
-            item.id === product.id ? { ...item, quantity: newQuantity } : item
-          )
-        : [...cartItems, { ...product, quantity: newQuantity }];
-    } else {
-      updatedCartItems = cartItems.filter((item) => item.id !== product.id);
+      if (!existingItem) {
+        dispatch(addToCart({ ...product, quantity: newQuantity }));
+      }
+    } else if (newQuantity === 0 && existingItem) {
+      dispatch(removeFromCart(product.id));
     }
-
-    setCartItems(updatedCartItems);
   };
 
   const incrementShopQuantity = () => {
-    setShopQuantity(shopQuantity + 1);
+    const newQuantity = shopQuantity + 1;
+    setShopQuantity(newQuantity);
+    updateCart(newQuantity);
   };
 
   const decrementShopQuantity = () => {
     if (shopQuantity > 0) {
       const newQuantity = shopQuantity - 1;
       setShopQuantity(newQuantity);
-      if (newQuantity === 0) {
-        updateCart(0);
-      }
+      updateCart(newQuantity);
     }
-  };
-
-  const addToCart = () => {
-    setShopQuantity(1);
-    updateCart(1);
   };
 
   useEffect(() => {
     if (existingItem) {
       setShopQuantity(existingItem.quantity);
+    } else {
+      setShopQuantity(0);
     }
   }, [existingItem]);
 
@@ -55,14 +48,14 @@ const ProductCard = ({ product }) => {
       <p>{product.description}</p>
       <p>${product.price}</p>
 
-      {existingItem ? (
+      {shopQuantity > 0 ? (
         <QuantityControl
           quantity={shopQuantity}
           onIncrement={incrementShopQuantity}
           onDecrement={decrementShopQuantity}
         />
       ) : (
-        <button className="add-to-cart" onClick={addToCart}>
+        <button className="add-to-cart" onClick={incrementShopQuantity}>
           Add to Cart
         </button>
       )}

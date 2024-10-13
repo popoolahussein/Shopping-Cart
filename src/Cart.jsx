@@ -1,33 +1,24 @@
-import { useState, useContext } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useState } from 'react';
 import Modal from './Modal.jsx';
-import { CartContext } from './CartContext.jsx';
+import { incrementQuantity, decrementQuantity, removeFromCart, clearCart } from './cartSlice';
 
 const Cart = () => {
-  const { cartItems, setCartItems } = useContext(CartContext);
+  const cartItems = useSelector((state) => state.cart.cartItems);
+  const dispatch = useDispatch();
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [isSocialModalOpen, setIsSocialModalOpen] = useState(false);
 
   const handleIncrement = (id) => {
-    const updatedCartItems = cartItems.map((item) =>
-      item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-    );
-    setCartItems(updatedCartItems);
+    dispatch(incrementQuantity(id));
   };
 
   const handleDecrement = (id) => {
-    const updatedCartItems = cartItems
-      .map((item) =>
-        item.id === id
-          ? { ...item, quantity: Math.max(item.quantity - 1, 0) }
-          : item
-      )
-      .filter(item => item.quantity > 0);
-    setCartItems(updatedCartItems);
+    dispatch(decrementQuantity(id));
   };
 
   const handleRemove = (id) => {
-    const updatedCartItems = cartItems.filter((item) => item.id !== id);
-    setCartItems(updatedCartItems);
+    dispatch(removeFromCart(id));
   };
 
   const handleClearCart = () => {
@@ -35,20 +26,8 @@ const Cart = () => {
   };
 
   const handleConfirmClear = () => {
-    setCartItems([]);
+    dispatch(clearCart());
     setIsConfirmationModalOpen(false);
-  };
-
-  const handleCloseConfirmationModal = () => {
-    setIsConfirmationModalOpen(false);
-  };
-
-  const handleCheckoutClick = () => {
-    setIsSocialModalOpen(true);
-  };
-
-  const handleCloseSocialModal = () => {
-    setIsSocialModalOpen(false);
   };
 
   const totalAmount = cartItems.reduce(
@@ -85,7 +64,7 @@ const Cart = () => {
             <button className="clearCart" onClick={handleClearCart}>
               Clear Cart
             </button>
-            <button onClick={handleCheckoutClick} className="checkout-button">
+            <button onClick={() => setIsSocialModalOpen(true)} className="checkout-button">
               Checkout
             </button>
           </div>
@@ -97,25 +76,16 @@ const Cart = () => {
                 <h3>{item.title}</h3>
                 <p>${item.price}</p>
                 <div className="quantity-control">
-                  <button
-                    className="decrement-button"
-                    onClick={() => handleDecrement(item.id)}
-                  >
+                  <button className="decrement-button" onClick={() => handleDecrement(item.id)}>
                     -
                   </button>
                   <span>{item.quantity}</span>
-                  <button
-                    className="increment-button"
-                    onClick={() => handleIncrement(item.id)}
-                  >
+                  <button className="increment-button" onClick={() => handleIncrement(item.id)}>
                     +
                   </button>
                 </div>
                 <div className="cart-remove-button-box">
-                  <button
-                    className="cart-remove-button"
-                    onClick={() => handleRemove(item.id)}
-                  >
+                  <button className="cart-remove-button" onClick={() => handleRemove(item.id)}>
                     Remove
                   </button>
                 </div>
@@ -123,15 +93,15 @@ const Cart = () => {
             ))}
           </div>
 
-          <Modal isOpen={isConfirmationModalOpen} onClose={handleCloseConfirmationModal}>
+          <Modal isOpen={isConfirmationModalOpen} onClose={() => setIsConfirmationModalOpen(false)}>
             <p>Are you sure you want to clear all items from your cart?</p>
             <div className="modal-buttons">
               <button onClick={handleConfirmClear}>Yes</button>
-              <button onClick={handleCloseConfirmationModal}>No</button>
+              <button onClick={() => setIsConfirmationModalOpen(false)}>No</button>
             </div>
           </Modal>
 
-          <Modal isOpen={isSocialModalOpen} onClose={handleCloseSocialModal}>
+          <Modal isOpen={isSocialModalOpen} onClose={() => setIsSocialModalOpen(false)}>
             <h3>Share via:</h3>
             <div className="social-share">
               <a href={socialLinks.email} target="_blank" rel="noopener noreferrer">

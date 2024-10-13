@@ -1,13 +1,13 @@
-import { useState, useEffect, useRef, useContext } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useDispatch } from 'react-redux';
+import { addToCart } from './cartSlice';
 import ProductCard from './ProductCard.jsx';
-import { CartContext } from './CartContext.jsx';
 
 const Shop = () => {
   const [products, setProducts] = useState([]);
   const imageContainerRef = useRef(null);
   const carouselIntervalRef = useRef(null);
-  const { cartItems, setCartItems } = useContext(CartContext);
-
+  const dispatch = useDispatch();
   useEffect(() => {
     fetch('https://fakestoreapi.com/products')
       .then((res) => res.json())
@@ -19,6 +19,7 @@ const Shop = () => {
       if (!imageContainerRef.current) return;
 
       const maxScrollLeft = imageContainerRef.current.scrollWidth - imageContainerRef.current.clientWidth;
+      const scrollAmount = window.innerWidth < 600 ? 150 : 300;
 
       if (imageContainerRef.current.scrollLeft >= maxScrollLeft) {
         imageContainerRef.current.scrollTo({ left: 0, behavior: 'smooth' });
@@ -26,8 +27,6 @@ const Shop = () => {
         imageContainerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
       }
     };
-
-    const scrollAmount = window.innerWidth < 600 ? 150 : 300;
 
     if (imageContainerRef.current) {
       carouselIntervalRef.current = setInterval(scrollCarousel, 5000);
@@ -59,6 +58,10 @@ const Shop = () => {
     }
   };
 
+  const handleAddToCart = (product) => {
+    dispatch(addToCart({ id: product.id, title: product.title, price: product.price, quantity: 1 }));
+  };
+
   return (
     <div
       className="shop"
@@ -67,12 +70,7 @@ const Shop = () => {
       onMouseLeave={handleMouseLeave}
     >
       {products.map((product) => (
-        <ProductCard 
-          key={product.id} 
-          product={product} 
-          cartItems={cartItems} 
-          setCartItems={setCartItems} 
-        />
+        <ProductCard key={product.id} product={product} onAddToCart={() => handleAddToCart(product)} />
       ))}
     </div>
   );
